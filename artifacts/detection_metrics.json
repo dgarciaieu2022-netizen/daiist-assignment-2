@@ -1,0 +1,130 @@
+{
+  "overall": {
+    "precision": 0.6937617760487721,
+    "recall": 0.8365625,
+    "AP50": 0.7894981053572518,
+    "mAP50-95": 0.7641228450093923
+  },
+  "per_class": [
+    {
+      "class": "Uncracked egg",
+      "precision": 0.7471559625789889,
+      "recall": 0.72,
+      "AP50": 0.7650823859081334,
+      "AP50-95": 0.7492520447847386
+    },
+    {
+      "class": "cracked egg",
+      "precision": 0.6403675895185553,
+      "recall": 0.953125,
+      "AP50": 0.8139138248063702,
+      "AP50-95": 0.7789936452340458
+    }
+  ],
+  "confusion_matrix": {
+    "rows_predicted_cols_true": [
+      [
+        12,
+        2,
+        9
+      ],
+      [
+        13,
+        60,
+        21
+      ],
+      [
+        0,
+        2,
+        0
+      ]
+    ],
+    "labels": [
+      "Uncracked egg",
+      "cracked egg",
+      "background"
+    ],
+    "confidence": 0.25
+  },
+  "note": "Per-class precision/recall are at the confidence that maximises mean F1 (Ultralytics).",
+  "baselines": {
+    "detection_AP50_by_model": {
+      "finetuned yolo11s": "see detection_metrics.json",
+      "COCO yolo11s zero-shot": 0.0,
+      "predict nothing": 0.0
+    },
+    "coco_zero_shot": {
+      "our_classes_in_coco_vocabulary": [],
+      "share_of_test_eggs_it_boxes_IoU50_any_class": 0.5063291139240507,
+      "classes_it_used_on_test_images": {
+        "mouse": 13,
+        "bowl": 11,
+        "sports ball": 11,
+        "frisbee": 6,
+        "potted plant": 4,
+        "cup": 3,
+        "apple": 3,
+        "bench": 3,
+        "bird": 2,
+        "toilet": 2,
+        "orange": 1,
+        "boat": 1,
+        "surfboard": 1,
+        "umbrella": 1,
+        "bed": 1,
+        "cake": 1,
+        "toothbrush": 1,
+        "keyboard": 1
+      },
+      "why_AP_is_zero": "COCO has no 'egg' or 'cracked' class, so it cannot emit either label; at best it boxes the egg under another name."
+    },
+    "finetuned_share_of_test_eggs_boxed_IoU50": 0.9240506329113924,
+    "majority_class_in_train_images": "cracked egg",
+    "image_level_decision_on_test": {
+      "finetuned (single threshold)": {
+        "TP": 41,
+        "FP": 8,
+        "FN": 11,
+        "TN": 19,
+        "accuracy": 0.759493670886076,
+        "recall_cracked": 0.7884615384615384,
+        "precision_cracked": 0.8367346938775511,
+        "false_fail_rate": 0.2962962962962963,
+        "cost_per_1000": 59.87891737891737
+      },
+      "COCO zero-shot (cannot say cracked -> passes all)": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 52,
+        "TN": 27,
+        "accuracy": 0.34177215189873417,
+        "recall_cracked": 0.0,
+        "precision_cracked": 0.0,
+        "false_fail_rate": 0.0,
+        "cost_per_1000": 150.00000000000003
+      },
+      "predict nothing (pass all)": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 52,
+        "TN": 27,
+        "accuracy": 0.34177215189873417,
+        "recall_cracked": 0.0,
+        "precision_cracked": 0.0,
+        "false_fail_rate": 0.0,
+        "cost_per_1000": 150.00000000000003
+      },
+      "majority class": {
+        "TP": 52,
+        "FP": 27,
+        "FN": 0,
+        "TN": 0,
+        "accuracy": 0.6582278481012658,
+        "recall_cracked": 1.0,
+        "precision_cracked": 0.6582278481012658,
+        "false_fail_rate": 1.0,
+        "cost_per_1000": 95.0
+      }
+    }
+  }
+}

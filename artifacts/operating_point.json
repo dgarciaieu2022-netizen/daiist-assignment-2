@@ -1,0 +1,95 @@
+{
+  "assumptions": {
+    "base_rate": 0.05,
+    "cost_fn": 3.0,
+    "cost_fp": 0.1,
+    "cost_tp": 0.0,
+    "cost_tn": 0.0,
+    "cost_review": 0.013333333333333334,
+    "hourly_wage": 16.0,
+    "seconds_per_review": 3.0,
+    "human_recall": 0.95,
+    "human_false_fail": 0.01,
+    "eggs_per_day": 20000,
+    "productive_hours_per_shift": 7.0
+  },
+  "bayes_threshold_if_scores_were_calibrated": 0.03225806451612903,
+  "positives_in_split": {
+    "valid": 112,
+    "test": 52
+  },
+  "negatives_in_split": {
+    "valid": 46,
+    "test": 27
+  },
+  "single_threshold": {
+    "chosen_on": "valid",
+    "threshold": 0.7,
+    "valid": {
+      "t_low": 0.7,
+      "t_high": 0.7,
+      "cost_per_1000": 44.0333850931677,
+      "review_share": 0.0,
+      "pos_pass": 0.16964285714285715,
+      "pos_review": 0.0,
+      "pos_fail": 0.8303571428571429,
+      "neg_pass": 0.8043478260869565,
+      "neg_review": 0.0,
+      "neg_fail": 0.1956521739130435
+    },
+    "test": {
+      "t_low": 0.7,
+      "t_high": 0.7,
+      "cost_per_1000": 59.87891737891737,
+      "review_share": 0.0,
+      "pos_pass": 0.21153846153846154,
+      "pos_review": 0.0,
+      "pos_fail": 0.7884615384615384,
+      "neg_pass": 0.7037037037037037,
+      "neg_review": 0.0,
+      "neg_fail": 0.2962962962962963
+    },
+    "test_cost_95ci": {
+      "p2.5": 38.41880341880342,
+      "p97.5": 83.2494658119658
+    }
+  },
+  "review_band": {
+    "chosen_on": "valid",
+    "t_low": 0.0,
+    "t_high": 0.94,
+    "valid": {
+      "t_low": 0.0,
+      "t_high": 0.94,
+      "cost_per_1000": 19.668750000000006,
+      "review_share": 0.9870535714285714,
+      "pos_pass": 0.0,
+      "pos_review": 0.7410714285714286,
+      "pos_fail": 0.25892857142857145,
+      "neg_pass": 0.0,
+      "neg_review": 1.0,
+      "neg_fail": 0.0
+    },
+    "test": {
+      "t_low": 0.0,
+      "t_high": 0.94,
+      "cost_per_1000": 23.22701804368472,
+      "review_share": 0.9551994301994301,
+      "pos_pass": 0.0,
+      "pos_review": 0.8076923076923077,
+      "pos_fail": 0.19230769230769232,
+      "neg_pass": 0.0,
+      "neg_review": 0.9629629629629629,
+      "neg_fail": 0.037037037037037035
+    },
+    "test_cost_95ci": {
+      "p2.5": 19.584615384615386,
+      "p97.5": 29.72656695156696
+    },
+    "staffing": {
+      "eggs_reviewed_per_day": 19103.9886039886,
+      "person_hours_per_day": 15.919990503323833,
+      "people_needed": 2.2742843576176903
+    }
+  }
+}

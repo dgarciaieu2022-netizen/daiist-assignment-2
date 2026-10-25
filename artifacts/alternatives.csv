@@ -1,0 +1,5 @@
+option,cost_per_1000_eggs,cost_per_day_eur,share_to_person,people_needed,cracked_eggs_shipped_per_1000
+Do nothing (pack every egg),150.0,3000.0,0.0,0.0,50.0
+A person checks every egg,21.78,435.67,1.0,2.38,2.5
+Model decides alone,59.88,1197.58,0.0,0.0,10.58
+Model + human review band,23.23,464.54,0.9552,2.27,2.02

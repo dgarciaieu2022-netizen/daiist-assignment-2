@@ -1,0 +1,17 @@
+{
+  "classes": [
+    "Uncracked egg",
+    "cracked egg"
+  ],
+  "positive_class": "cracked egg",
+  "positive_index": 1,
+  "weights": "weights/egg_crack_yolo11s.pt",
+  "base_model": "yolo11s.pt",
+  "epochs": 100,
+  "patience": 25,
+  "imgsz": 640,
+  "batch": 16,
+  "seed": 0,
+  "device": "0",
+  "torch": "2.11.0+cu130"
+}

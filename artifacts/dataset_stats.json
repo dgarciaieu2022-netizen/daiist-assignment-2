@@ -1,0 +1,69 @@
+{
+  "images_per_split": {
+    "test": 79,
+    "train": 553,
+    "valid": 158
+  },
+  "instances_per_class_and_split": {
+    "test": {
+      "Uncracked egg": 25,
+      "cracked egg": 64
+    },
+    "train": {
+      "Uncracked egg": 185,
+      "cracked egg": 491
+    },
+    "valid": {
+      "Uncracked egg": 41,
+      "cracked egg": 145
+    }
+  },
+  "images_with_cracked_per_split": {
+    "test": 52,
+    "train": 380,
+    "valid": 112
+  },
+  "images_with_no_boxes": {
+    "test": 3,
+    "train": 14,
+    "valid": 7
+  },
+  "images_with_both_classes": 3,
+  "boxes_per_image": {
+    "count": 790.0,
+    "mean": 1.2,
+    "std": 0.62,
+    "min": 0.0,
+    "25%": 1.0,
+    "50%": 1.0,
+    "75%": 1.0,
+    "max": 5.0
+  },
+  "box_area_fraction_by_class": {
+    "Uncracked egg": {
+      "count": 251.0,
+      "mean": 0.1151,
+      "std": 0.0875,
+      "min": 0.006,
+      "10%": 0.0198,
+      "25%": 0.0515,
+      "50%": 0.0942,
+      "75%": 0.1606,
+      "90%": 0.2308,
+      "max": 0.4142
+    },
+    "cracked egg": {
+      "count": 700.0,
+      "mean": 0.0956,
+      "std": 0.0856,
+      "min": 0.0008,
+      "10%": 0.0138,
+      "25%": 0.0339,
+      "50%": 0.074,
+      "75%": 0.1321,
+      "90%": 0.1994,
+      "max": 0.6358
+    }
+  },
+  "small_boxes_share_under_1pct_of_image": 0.0568
+}
