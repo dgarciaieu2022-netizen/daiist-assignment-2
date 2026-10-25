@@ -207,6 +207,10 @@ with gr.Blocks(title="Cracked egg grading") as demo:
             gr.Markdown(f"Black dashed line: threshold chosen by train.py on validation ({T_STAR:.2f}). "
                         "Green dotted: cheapest threshold under the current assumptions and split. "
                         "Orange band: the current review band.")
+            if (A / "band_sensitivity.csv").exists():
+                gr.Markdown("### What would change the answer\nBand re-chosen on validation under each "
+                            "assumption, costed on test (€ per 1,000 eggs). From train.py.")
+                gr.Dataframe(pd.read_csv(A / "band_sensitivity.csv"), interactive=False)
         with gr.Tab("4 · Per-class results"):
             gr.Markdown("### Detection metrics on test, per class (not just the average)")
             gr.Dataframe(per_class_table(), interactive=False)

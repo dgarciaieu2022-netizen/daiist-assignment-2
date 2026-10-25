@@ -150,7 +150,18 @@ def base_checkpoint() -> str:
     return str(config.MODELS_CACHE / config.BASE_MODEL)
 
 
+def keep_helper_checkpoints_out_of_weights() -> None:
+    """Ultralytics' default weights_dir is <repo>/weights, the same folder we
+    commit. Its AMP self-check would download yolo26n.pt there. Point it at
+    .models/ instead, so weights/ only ever holds the model we trained."""
+    import ultralytics.utils as ul_utils
+
+    config.MODELS_CACHE.mkdir(exist_ok=True)
+    ul_utils.WEIGHTS_DIR = config.MODELS_CACHE
+
+
 def finetune(data_yaml: Path) -> YOLO:
+    keep_helper_checkpoints_out_of_weights()
     device = pick_device()
     log(f"Finetuning {config.BASE_MODEL} on device={device}")
     model = YOLO(base_checkpoint())
@@ -162,6 +173,9 @@ def finetune(data_yaml: Path) -> YOLO:
     )
     best = config.RUNS_DIR / "finetune" / "weights" / "best.pt"
     config.WEIGHTS_PATH.parent.mkdir(exist_ok=True)
+    for stray in config.WEIGHTS_PATH.parent.glob("*.pt"):  # belt and braces
+        if stray != config.WEIGHTS_PATH:
+            stray.unlink()
     shutil.copy(best, config.WEIGHTS_PATH)
     for extra in ["results.png", "results.csv"]:
         src = config.RUNS_DIR / "finetune" / extra
@@ -350,6 +364,39 @@ def sensitivity(scores, labels, costs: decision.Costs) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def band_sensitivity(val: pd.DataFrame, test: pd.DataFrame) -> pd.DataFrame:
+    """Re-choose the band on validation under different assumptions and cost
+    it on test, next to the three alternatives. Answers: which assumption,
+    if wrong, flips the decision? (Grid step 0.02 to keep this quick.)"""
+    grid = np.round(np.arange(0.0, 1.0001, 0.02), 2)
+    everyone = {"pos_pass": 0, "pos_review": 1, "pos_fail": 0, "neg_pass": 0, "neg_review": 1, "neg_fail": 0}
+    rows = []
+    for seconds in [3, 5, 10, 20]:
+        for br in [0.02, 0.05, 0.10]:
+            for fn in [1, 3, 10]:
+                c = decision.Costs(fn=fn, review=config.HOURLY_WAGE * seconds / 3600)
+                band = decision.best_band(decision.sweep_band(val.score, val.label, c, br, grid))
+                single = decision.best_single(decision.sweep_single(val.score, val.label, c, br, grid))
+                band_t = decision.evaluate(test.score, test.label, band.t_low, band.t_high, c, br)
+                alone_t = decision.evaluate(test.score, test.label, single.threshold, single.threshold, c, br)
+                rows.append({
+                    "seconds_per_review": seconds, "base_rate": br, "cost_fn": fn,
+                    "t_low": band.t_low, "t_high": band.t_high,
+                    "band_cost_test": round(band_t["cost_per_1000"], 1),
+                    "band_review_share_test": round(band_t["review_share"], 3),
+                    "alone_threshold": single.threshold,
+                    "alone_cost_test": round(alone_t["cost_per_1000"], 1),
+                    "person_checks_all": round(1000 * decision.cost_per_egg(everyone, c, br), 1),
+                    "do_nothing": round(1000 * br * fn, 1),
+                })
+    df = pd.DataFrame(rows)
+    alts = df[["band_cost_test", "alone_cost_test", "person_checks_all", "do_nothing"]]
+    df["cheapest"] = alts.idxmin(axis=1).map({
+        "band_cost_test": "model + review band", "alone_cost_test": "model alone",
+        "person_checks_all": "person checks all", "do_nothing": "do nothing"})
+    return df
+
+
 def plot_cost_curve(sweep_val, sweep_test, t_star) -> None:
     fig, ax = plt.subplots(figsize=(8, 4.5))
     ax.plot(sweep_val.threshold, sweep_val.cost_per_1000, label="validation (used to choose)")
@@ -386,6 +433,9 @@ def operating_point(model: YOLO, names: list[str]) -> tuple[pd.DataFrame, dict, 
     alts.to_csv(config.ARTIFACTS / "alternatives.csv", index=False)
     sens = sensitivity(val.score.to_numpy(), val.label.to_numpy(), costs)
     sens.to_csv(config.ARTIFACTS / "sensitivity.csv", index=False)
+    band_sens = band_sensitivity(val, test)
+    band_sens.to_csv(config.ARTIFACTS / "band_sensitivity.csv", index=False)
+    print(band_sens.to_string(index=False))
     plot_cost_curve(sweep_val, sweep_test, t_star)
 
     op = {
